@@ -1,17 +1,30 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from './gallery-items';
+
+
+console.log(galleryItems);
+
 import SimpleLightbox from 'simplelightbox';
-import templateFunction from '../templates/item-markup.hbs';
+
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const galleryRefs = document.querySelector('.gallery');
+const gallery = document.querySelector('.gallery');
+const items = [];
 
-(function createMarkup() {
-  const itemMarkup = galleryItems.map(templateFunction).join('');
-  galleryRefs.insertAdjacentHTML('beforeend', itemMarkup);
-})();
+galleryItems.forEach(element => {
+  const galleryLink = document.createElement('a');
+  galleryLink.className = 'gallery__link';
+  galleryLink.href = element.original;
+  const galleryImage = document.createElement('img');
+  galleryImage.className = 'gallery__image';
+  galleryImage.src = element.preview;
+  galleryImage.setAttribute('title', element.description);
+  galleryImage.alt = element.description;
+
+  galleryLink.append(galleryImage);
+  items.push(galleryLink);
+});
+gallery.append(...items);
 
 new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionsData: 'alt',
   captionDelay: 250,
 });
